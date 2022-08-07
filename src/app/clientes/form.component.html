@@ -16,8 +16,8 @@
   <input type="text" class="form-control" name="nombre" [(ngModel)]="cliente.nombre" #nombre="ngModel"> <!-- required="true" minlength="4" -->
   <!-- dirty (propiedad para que aparezca mensaje mientras escribo en el input)- tuuched (propiedad para que aparezca mensaje cuando saco el focoi del input) -->
   <div class="alert alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
-    <div *ngIf="nombre.errors.required">Nombre es requerido</div>
-    <div *ngIf="nombre.errors.minlength">Nombre debe tener al menos 4 caracteres</div>
+    <div *ngIf="nombre.errors['minlength']">Nombre es requerido</div>
+    <div *ngIf="nombre.errors['minlength']">Nombre debe tener al menos 4 caracteres</div>
   </div>
 </div>
 </div>
@@ -28,8 +28,8 @@
 <div class="col-sm-6">
   <input type="text" class="form-control" name="apellido" [(ngModel)]="cliente.apellido" #apellido="ngModel"> <!-- required="true" minlength="4" -->
   <div class="alert alert-danger" *ngIf="apellido.invalid && (apellido.dirty || apellido.touched)">
-    <div *ngIf="apellido.errors.required">Apellido es requerido</div>
-    <div *ngIf="apellido.errors.minlength">Apellido debe tener al menos 4 caracteres</div>
+    <div *ngIf="apellido.errors['required']">Apellido es requerido</div>
+    <div *ngIf="apellido.errors['minlength']">Apellido debe tener al menos 4 caracteres</div>
   </div>
 </div>
 </div>
@@ -41,8 +41,8 @@
   <!-- email le dice al input que es del tipo email y realiza validaciones automaticamente -->
   <input type="text" class="form-control" name="email" [(ngModel)]="cliente.email" #email="ngModel"> <!-- required="true" email -->
   <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
-    <div *ngIf="email.errors.required">Email es requerido</div>
-    <div *ngIf="email.errors.email">Email debe tener un formato valido</div>
+    <div *ngIf="email.errors['required']">Email es requerido</div>
+    <div *ngIf="email.errors['email']">Email debe tener un formato valido</div>
   </div>
 </div>
 </div>

@@ -19,8 +19,9 @@ export class ClientesComponent implements OnInit {
   constructor(private clienteService: ClienteService, private router : Router, private activatedRoute :ActivatedRoute) { }
 
   ngOnInit(): void {
-  this.clienteService.getClientes().subscribe(result => {
-    this.clientes = result
+  let nroPagina = 0;
+  this.clienteService.getClientes(nroPagina).subscribe(result => {
+    this.clientes = result.content as Cliente[];
   });
   }
 

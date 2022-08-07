@@ -20,25 +20,23 @@ export class ClienteService {
 
   constructor(private httpClient : HttpClient, private router : Router) { }
 
-  getClientes(): Observable<Cliente[]> {
+  getClientes(nroPagina : number): Observable<any> {
     //return of(CLIENTES);
-    return this.httpClient.get<Cliente[]>(this.urlBackend).pipe(
-      tap(response => { // tap sirve para realizar alguna accion sobre los datos sin modificarlos, importa el orden en el cual se ejecuta
-        let clientes = response as Cliente[];
-        clientes.forEach(cliente => {
+    return this.httpClient.get<Cliente[]>(this.urlBackend + '/page/' + nroPagina).pipe(
+      tap((response : any) => { // tap sirve para realizar alguna accion sobre los datos sin modificarlos, importa el orden en el cual se ejecuta
+        (response.content as Cliente[]).forEach(cliente => {
           console.log("Estoy en el tap");          
           console.log(cliente.nombre);
-          
         })
       }),
-      map(response => {
-        let clientes = response as Cliente[];
-        return clientes.map(clienteAModificar => {
+      map((response : any) => {
+        (response.content as Cliente[]).map(clienteAModificar => {
 
           clienteAModificar.nombre = clienteAModificar.nombre.toUpperCase();// Le cambiamos el nombre de todos los clientes a mayuscula
           //clienteAModificar.createAt = formatDate(clienteAModificar.createAt as string, 'EEEE dd, MMMM yyyy', 'es');
           return clienteAModificar;
-        })
+        });
+        return response;
       })
     );
   }
