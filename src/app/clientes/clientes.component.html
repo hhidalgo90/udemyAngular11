@@ -40,5 +40,7 @@
         </tr>
       </tbody>
     </table>
+    <paginator-nav *ngIf="paginadorPadre" [paginadorHijo]= "paginadorPadre"></paginator-nav>
+    <!--Inyeccion de dependencias entre componente padre e hijo-->
   </div>
 </div>

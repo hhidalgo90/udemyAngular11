@@ -1,0 +1,23 @@
+<ul *ngIf="paginas?.length > 0" class="pagination">
+    <li class="page-item" *ngIf="!paginadorHijo.first">
+        <a class="page-link" [routerLink]="['/clientes/page', 0]"> Primera pagina </a>
+    </li>
+
+    <li class="page-item" *ngIf="paginadorHijo.number > 0">
+        <a class="page-link" [routerLink]="['/clientes/page', paginadorHijo.number-1]"> &laquo; </a>
+    </li>
+
+    <li class="page-item" *ngFor="let nroPagina of paginas" [ngClass]="nroPagina-1 == paginadorHijo.number?'active':''">
+        <span class="page-link" *ngIf="nroPagina-1 == paginadorHijo.number">{{ nroPagina }}</span>
+        <a class="page-link" *ngIf="nroPagina-1 != paginadorHijo.number" [routerLink]="['/clientes/page', nroPagina-1]" routerLinkActive="router-link-active" >{{ nroPagina }}</a>
+        <!--pagina -1 porque en el backend se inicializa en 0 y en angular le sumamos 1-->
+    </li>
+
+    <li class="page-item" *ngIf="paginadorHijo.number < paginadorHijo.totalPages - 1">
+        <a class="page-link" [routerLink]="['/clientes/page', paginadorHijo.number+1]"> &raquo; </a>
+    </li>
+
+    <li class="page-item" *ngIf="!paginadorHijo.last">
+        <a class="page-link" [routerLink]="['/clientes/page', paginadorHijo.totalPages - 1]"> Ultima pagina </a>
+    </li>
+</ul>

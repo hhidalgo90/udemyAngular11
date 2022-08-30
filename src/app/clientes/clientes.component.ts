@@ -15,13 +15,21 @@ export class ClientesComponent implements OnInit {
 
   clientes: Cliente[];
   idCliente: any;
+  paginadorPadre: any;
 
   constructor(private clienteService: ClienteService, private router : Router, private activatedRoute :ActivatedRoute) { }
 
   ngOnInit(): void {
-  let nroPagina = 0;
+  
+  this.activatedRoute.paramMap.subscribe(params => { //observador para cada vez que cambie el parametro page entre las paginas
+  let nroPagina = +params.get('page');
+  if(!nroPagina){
+    nroPagina = 0;
+  }
   this.clienteService.getClientes(nroPagina).subscribe(result => {
     this.clientes = result.content as Cliente[];
+    this.paginadorPadre = result;
+  });
   });
   }
 
