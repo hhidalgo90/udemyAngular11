@@ -17,7 +17,8 @@ import  localeES  from '@angular/common/locales/es';//indidamos que es para espa
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatMomentDateModule } from '@angular/material-moment-adapter'
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
+import { DetalleComponent } from './clientes/detalle/detalle.component'
 //import { MatFormFieldModule } from '@angular/material/form-field/form-field-module';
 
 registerLocaleData(localeES), 'es';//esto es para internacionalizacion, es decir para convertir fechas o numeros de monedas de ingles a espanol
@@ -39,7 +40,8 @@ const routes : Routes = [
     DirectivaComponent,
     ClientesComponent,
     FormComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DetalleComponent
   ],
   imports: [
     BrowserModule,

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common'; //Para formatear la fecha
-import { CLIENTES } from '../clientes/clientes.json';
 import { Cliente } from '../clientes/cliente';
 import { of , Observable, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { map , catchError, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -47,13 +46,13 @@ export class ClienteService {
       catchError(e => {
 
         if(e.status == 400){
-          return throwError(e);
+          return throwError(() => new Error(e));
         }
 
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
         Swal.fire('Error al crear cliente', e.error.mensaje, 'error');
-        return throwError(e); //retorna un observable del error, para que sea consistente con el metodo
+        return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
   }
@@ -64,7 +63,7 @@ export class ClienteService {
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
         Swal.fire('Error al obtener cliente', e.error.mensaje, 'error');
-        return throwError(e); //retorna un observable del error, para que sea consistente con el metodo
+        return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
   }
@@ -74,13 +73,13 @@ export class ClienteService {
       catchError(e => {
 
         if(e.status == 400){
-          return throwError(e);
+          return throwError(() => new Error(e));
         }
 
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
         Swal.fire('Error al editar cliente', e.error.mensaje, 'error');
-        return throwError(e); //retorna un observable del error, para que sea consistente con el metodo
+        return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
   }
@@ -91,7 +90,30 @@ export class ClienteService {
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
         Swal.fire('Error al eliminar cliente', e.error.mensaje, 'error');
-        return throwError(e); //retorna un observable del error, para que sea consistente con el metodo
+        return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
+      })
+    );
+  }
+
+  subirFoto(foto : File, id :any) : Observable<HttpEvent<{}>>{
+    let formData = new FormData();
+    formData.append("imagenUsuario", foto); //mismo nombre que le pusimos en el backend al requestParam
+    formData.append("id", id);
+
+    const req = new HttpRequest('POST', `${this.urlBackend}/upload`, formData, {
+      reportProgress: true
+    });
+
+    return this.httpClient.request(req);
+  }
+
+  obtenerFoto(nombreFoto:any): Observable<Cliente> {
+    return this.httpClient.get<Cliente>(`${this.urlBackend}/uploads/img/${nombreFoto}`).pipe(
+      catchError(e => {
+        this.router.navigate(['/clientes']);
+        console.error(e.error.mensaje);
+        Swal.fire('Error al obtener cliente', e.error.mensaje, 'error');
+        return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
   }

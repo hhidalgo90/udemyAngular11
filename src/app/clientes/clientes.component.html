@@ -1,3 +1,6 @@
+<detalle-cliente *ngIf="clienteSeleccionado" [cliente]="clienteSeleccionado"></detalle-cliente>
+<!-- cliente es un atributo del componente que estamos inyectando, en este caso el detalle.component -->
+
 <div class="card border-secondary mb-3">
   <div class="card-header">Familia</div>
   <div class="card-body text-secondary">
@@ -14,7 +17,7 @@
     <table class="table table-bordered table-striped" *ngIf="clientes?.length > 0">
       <thead>
         <tr>
-          <th>ID</th>
+          <th>Perfil</th>
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Email</th>
@@ -26,7 +29,17 @@
 
       <tbody>
         <tr *ngFor="let item of clientes">
-          <td>{{item.id}}</td>
+          <td><img (click)="abrirModal(item)" *ngIf="item?.foto"
+            src="http://localhost:8080/apiCliente/uploads/img/{{item.foto}}"
+            alt="Foto de cliente {{item.nombre}}" class="img-thumbnail rounded"
+            style="width: 64px; height: 64px; cursor: pointer; margin-left: 10%;"> <!-- cursor.pointer mostrar la mano en vez de la flecha al pasar por encima -->
+
+            <img (click)="abrirModal(item)" *ngIf="!item?.foto"
+            src="http://localhost:8080/images/notUser.png"
+            alt="Sin foto" class="img-thumbnail rounded"
+            style="width: 64px; height: 64px; cursor: pointer; margin-left: 10%;">
+          </td>
+
           <td>{{item.nombre}}</td>
           <td>{{item.apellido | uppercase}}</td>
           <td>{{item.email}}</td>

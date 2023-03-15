@@ -3,6 +3,7 @@ import { Cliente } from './cliente';
 import { ClienteService } from '../service/cliente.service';
 import { Router, ActivatedRoute } from '@angular/router'
 import Swal from 'sweetalert2'
+import { ModalService } from './detalle/modal.service';
 
 
 
@@ -16,8 +17,10 @@ export class ClientesComponent implements OnInit {
   clientes: Cliente[];
   idCliente: any;
   paginadorPadre: any;
+  clienteSeleccionado : Cliente;
 
-  constructor(private clienteService: ClienteService, private router : Router, private activatedRoute :ActivatedRoute) { }
+  constructor(private clienteService: ClienteService, private router : Router, private activatedRoute :ActivatedRoute,
+    private modalService : ModalService) { }
 
   ngOnInit(): void {
   
@@ -30,6 +33,16 @@ export class ClientesComponent implements OnInit {
     this.clientes = result.content as Cliente[];
     this.paginadorPadre = result;
   });
+  });
+
+  //aca me suscribo al motificar foto para actualizar la foto de la lista cuando se sube una nueva foto
+  this.modalService.notificarSubirFoto.subscribe(cliente => {
+    this.clientes = this.clientes.map(clienteActual => {
+      if(cliente.id == clienteActual.id){
+        clienteActual.foto = cliente.foto;
+      }
+      return clienteActual;
+    });
   });
   }
 
@@ -74,6 +87,13 @@ export class ClientesComponent implements OnInit {
         )
       }
     })
+  }
+
+  abrirModal(cliente : Cliente){
+    console.log("Abrir modal");
+    
+    this.clienteSeleccionado = cliente;
+    this.modalService.abrirModal();
   }
 
 }
