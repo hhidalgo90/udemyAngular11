@@ -43,13 +43,13 @@ export class ClienteService {
 
   create(cliente : Cliente) : Observable<Cliente> {
     return this.httpClient.post(this.urlBackend, cliente, {headers : this.headers}).pipe(
-      map((respuesta : any) => respuesta.cliente as Cliente),//FORMA 2 DE OBTENER AL CLIENTE, CON MAP CONVERTIMOS MANUALMENTE AL OBJETO CLIENTE
-      catchError(e => {
+      map((respuesta : any) => respuesta.cliente as Cliente)//FORMA 2 DE OBTENER AL CLIENTE, CON MAP CONVERTIMOS MANUALMENTE AL OBJETO CLIENTE
+      /*catchError(e => {
         console.log("error al crear cliente");
         console.log(e);
         Swal.fire('Error al crear cliente', e.error.message, 'error');
         return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
-      })
+      })*/
     );
   }
 

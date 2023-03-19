@@ -40,16 +40,17 @@ export class FormComponent implements OnInit {
   public create() :void {
     console.log("Clicked create");
     console.log(this.cliente);
-    this.clienteService.create(this.cliente).subscribe(resp => {
-      console.log(resp);
-      this.router.navigate(['/clientes']);
-      Swal.fire('Cliente creado', `${resp.nombre} ha sido creado con éxito!`, 'success');//El `` sirve para hacer interpolacion de strings y mandar un parametro en el mensaje
-    },
-    err => {
-      this.errores = err.error.errores as string[];
-      console.error('Observer got an error: ' + err);
-      console.log(this.errores);
-      
+    this.clienteService.create(this.cliente).subscribe({
+      next : resp => {
+        console.log(resp);
+        this.router.navigate(['/clientes']);
+        Swal.fire('Cliente creado', `${resp.nombre} ha sido creado con éxito!`, 'success');//El `` sirve para hacer interpolacion de strings y mandar un parametro en el mensaje
+      },
+      error: (e) => {
+        console.log(e.error);
+        this.errores = e.error.errores;
+        Swal.fire('Error al crear cliente', e.error.message, 'error');
+      }
     });
   }
 
