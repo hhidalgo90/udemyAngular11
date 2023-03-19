@@ -6,6 +6,7 @@ import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common
 import { map , catchError, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { Region } from '../clientes/region';
 
 @Injectable({
   providedIn: 'root'
@@ -44,14 +45,9 @@ export class ClienteService {
     return this.httpClient.post(this.urlBackend, cliente, {headers : this.headers}).pipe(
       map((respuesta : any) => respuesta.cliente as Cliente),//FORMA 2 DE OBTENER AL CLIENTE, CON MAP CONVERTIMOS MANUALMENTE AL OBJETO CLIENTE
       catchError(e => {
-
-        if(e.status == 400){
-          return throwError(() => new Error(e));
-        }
-
-        this.router.navigate(['/clientes']);
-        console.error(e.error.mensaje);
-        Swal.fire('Error al crear cliente', e.error.mensaje, 'error');
+        console.log("error al crear cliente");
+        console.log(e);
+        Swal.fire('Error al crear cliente', e.error.message, 'error');
         return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
@@ -116,5 +112,9 @@ export class ClienteService {
         return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
+  }
+
+  getRegiones(): Observable<Region[]> {
+    return this.httpClient.get<Region[]>(`${this.urlBackend}/regiones`);
   }
 }
