@@ -49,24 +49,29 @@ export class FormComponent implements OnInit {
       error: (e) => {
         console.log(e.error);
         this.errores = e.error.errores;
-        Swal.fire('Error al crear cliente', e.error.message, 'error');
+        //Swal.fire('Error al crear cliente', e.error.message, 'error');
       }
     });
   }
 
   public update(): void {
-    this.clienteService.update(this.cliente).subscribe(respuesta => {
+    this.clienteService.update(this.cliente).subscribe({next : respuesta => {
       this.cliente = respuesta;
       this.router.navigate(['/clientes']);
       Swal.fire('Cliente actualizado', `${respuesta.mensaje} ${respuesta.cliente.nombre} !`, 'success');
     },
-    err => { //capturo error en caso de ser 400 desde el backend
-      this.errores = err.error.errors as string[];
+    error : (e) => { //capturo error en caso de ser 400 desde el backend
+      this.errores = e.error.errores as string[];
+      console.error(e.error);
+      Swal.fire('Error al editar cliente', e.error.mensaje, 'error');
     }
-    );
+  });
   }
 
   compararRegion(regionDelListado: Region, regionDelCliente: Region) : boolean {
+    if(regionDelListado === undefined && regionDelCliente === undefined){
+      return true;
+    }
     return regionDelListado === null || regionDelCliente === null || regionDelListado === undefined || regionDelCliente === undefined? false: regionDelListado.id===regionDelCliente.id;
   }
 }

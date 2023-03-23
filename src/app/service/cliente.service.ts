@@ -65,19 +65,7 @@ export class ClienteService {
   }
 
   update(cliente : Cliente): Observable<any>{
-    return this.httpClient.put<any>(`${this.urlBackend}/${cliente.id}`, cliente, {headers: this.headers}).pipe(
-      catchError(e => {
-
-        if(e.status == 400){
-          return throwError(() => new Error(e));
-        }
-
-        this.router.navigate(['/clientes']);
-        console.error(e.error.mensaje);
-        Swal.fire('Error al editar cliente', e.error.mensaje, 'error');
-        return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
-      })
-    );
+    return this.httpClient.put<any>(`${this.urlBackend}/${cliente.id}`, cliente, {headers: this.headers});
   }
 
   delete(id: any): Observable<any>{
