@@ -1,7 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
 html {
-  position: relative;
   min-height: 100%;
 }
 
@@ -11,3 +10,13 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+#wrap {
+  min-height: 100%;
+  padding-top: 10px;
+}
+
+#main {
+  overflow:auto;
+  padding-bottom:60px; /* this needs to be bigger than footer height*/
+}

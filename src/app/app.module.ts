@@ -18,7 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
-import { DetalleComponent } from './clientes/detalle/detalle.component'
+import { DetalleComponent } from './clientes/detalle/detalle.component';
+import { LoginComponent } from './usuarios/login.component'
 //import { MatFormFieldModule } from '@angular/material/form-field/form-field-module';
 
 registerLocaleData(localeES), 'es';//esto es para internacionalizacion, es decir para convertir fechas o numeros de monedas de ingles a espanol
@@ -29,7 +30,8 @@ const routes : Routes = [
   {path: 'clientes', component : ClientesComponent},
   {path: 'clientes/page/:page', component : ClientesComponent}, //ruta para el paginador
   {path: 'clientes/form', component : FormComponent},
-  {path: 'clientes/form/:id', component : FormComponent}
+  {path: 'clientes/form/:id', component : FormComponent},
+  {path: 'login', component : LoginComponent}
 ]
 
 @NgModule({
@@ -41,7 +43,8 @@ const routes : Routes = [
     ClientesComponent,
     FormComponent,
     PaginatorComponent,
-    DetalleComponent
+    DetalleComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
