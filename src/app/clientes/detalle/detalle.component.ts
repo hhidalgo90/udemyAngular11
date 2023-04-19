@@ -4,6 +4,7 @@ import { ClienteService } from 'src/app/service/cliente.service';
 import { Cliente } from '../cliente';
 import Swal from 'sweetalert2';
 import { ModalService } from './modal.service';
+import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
   selector: 'detalle-cliente',
@@ -18,7 +19,7 @@ export class DetalleComponent implements OnInit {
   progreso: number = 0;
 
   //Con ActivatedRoute recibo el parametro enviado por el RouterLink en la vista
-  constructor(private clienteService : ClienteService, public modalService : ModalService) { }
+  constructor(private clienteService : ClienteService, public modalService : ModalService, public authService : AuthService) { }
 
   ngOnInit(): void {
 

@@ -46,8 +46,7 @@ export class FormComponent implements OnInit {
         this.router.navigate(['/clientes']);
         Swal.fire('Cliente creado', `${resp.nombre} ha sido creado con éxito!`, 'success');//El `` sirve para hacer interpolacion de strings y mandar un parametro en el mensaje
       },
-      error: (e) => {
-        console.log(e.error);
+      error: e => {
         this.errores = e.error.errores;
         //Swal.fire('Error al crear cliente', e.error.message, 'error');
       }
@@ -61,9 +60,10 @@ export class FormComponent implements OnInit {
       Swal.fire('Cliente actualizado', `${respuesta.mensaje} ${respuesta.cliente.nombre} !`, 'success');
     },
     error : (e) => { //capturo error en caso de ser 400 desde el backend
-      this.errores = e.error.errores as string[];
-      console.error(e.error);
-      Swal.fire('Error al editar cliente', e.error.mensaje, 'error');
+      //this.errores = e.error.errores as string[];
+      console.log(e.error);
+      this.errores = e.error.errores;
+      //Swal.fire('Error al editar cliente', e.error.mensaje, 'error');
     }
   });
   }

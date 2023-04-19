@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { formatDate } from '@angular/common'; //Para formatear la fecha
 import { Cliente } from '../clientes/cliente';
-import { of , Observable, throwError } from 'rxjs';
-import { HttpClient, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { map , catchError, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
@@ -14,9 +14,11 @@ import { Region } from '../clientes/region';
 export class ClienteService {
   private urlBackend : string = 'http://localhost:8080/apiCliente/clientes';
 
+  /*SE ELIMINA ESTA IMPLEMENTACION YA QUE SE AGREGA EL TOKEN INTERCEPTOR, QUE GENERA EL HEADERS AUTOMATICAMENTE
   private headers = new HttpHeaders({
-    'Content-Type' : 'application/json'
-  });
+    'Content-Type' : 'application/json',
+    'Authorization' : 'Bearer ' + this.authService.token
+  });*/
 
   constructor(private httpClient : HttpClient, private router : Router) { }
 
@@ -42,17 +44,14 @@ export class ClienteService {
   }
 
   create(cliente : Cliente) : Observable<Cliente> {
-    return this.httpClient.post(this.urlBackend, cliente, {headers : this.headers}).pipe(
+    return this.httpClient.post(this.urlBackend, cliente).pipe(
       map((respuesta : any) => respuesta.cliente as Cliente),//FORMA 2 DE OBTENER AL CLIENTE, CON MAP CONVERTIMOS MANUALMENTE AL OBJETO CLIENTE
-      catchError(e => {
-        if(this.isNoAutorizado(e)){
-          return throwError(() => new Error(e));
-        }
+      catchError((e : HttpErrorResponse) => {
         if(e.status == 400){
-          return throwError(() => new Error(e));
+          return throwError(() => new HttpErrorResponse(e));
         } //retorna un observable del error, para que sea consistente con el metodo
 
-        return throwError(() => new Error(e));
+        return throwError(() => new HttpErrorResponse(e));
       })
     );
   }
@@ -60,37 +59,30 @@ export class ClienteService {
   getCliente(id:any): Observable<Cliente> {
     return this.httpClient.get<Cliente>(`${this.urlBackend}/${id}`).pipe(
       catchError(e => {
-        if(this.isNoAutorizado(e)){
-          return throwError(() => new Error(e));
+        if(e.status != 401 && e.error.mensaje){
+          this.router.navigate(['/clientes']);
+          console.error(e.error.mensaje);
+
         }
-        this.router.navigate(['/clientes']);
-        console.error(e.error.mensaje);
-        Swal.fire('Error al obtener cliente', e.error.mensaje, 'error');
         return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
   }
 
   update(cliente : Cliente): Observable<any>{
-    return this.httpClient.put<any>(`${this.urlBackend}/${cliente.id}`, cliente, {headers: this.headers}).pipe(
-      catchError(e => {
-        if(this.isNoAutorizado(e)){
-          return throwError(() => new Error(e));
-        }
-        return throwError(() => new Error(e));
+    return this.httpClient.put<any>(`${this.urlBackend}/${cliente.id}`, cliente).pipe(
+      catchError((e : HttpErrorResponse) => {
+        console.error(e.error.errores);
+        return throwError(() => new HttpErrorResponse(e));
       })
     );
   }
 
   delete(id: any): Observable<any>{
-    return this.httpClient.delete(`${this.urlBackend}/${id}`, {headers : this.headers}).pipe(
+    return this.httpClient.delete(`${this.urlBackend}/${id}`).pipe(
       catchError(e => {
-        if(this.isNoAutorizado(e)){
-          return throwError(() => new Error(e));
-        }
         this.router.navigate(['/clientes']);
         console.error(e.error.mensaje);
-        Swal.fire('Error al eliminar cliente', e.error.mensaje, 'error');
         return throwError(() => new Error(e)); //retorna un observable del error, para que sea consistente con el metodo
       })
     );
@@ -105,14 +97,10 @@ export class ClienteService {
       reportProgress: true
     });
 
-    return this.httpClient.request(req).pipe(
-      catchError(e => {
-        if(this.isNoAutorizado(e)){
-          return throwError(() => new Error(e));
-        }
-        return throwError(() => new Error(e));
-      })
-    );
+    console.log('subirFoto');
+    console.log(req);
+    
+    return this.httpClient.request(req);
   }
 
   obtenerFoto(nombreFoto:any): Observable<Cliente> {
@@ -127,19 +115,7 @@ export class ClienteService {
   }
 
   getRegiones(): Observable<Region[]> {
-    return this.httpClient.get<Region[]>(`${this.urlBackend}/regiones`).pipe(
-      catchError(e => {
-        this.isNoAutorizado(e);
-        return throwError(()=> new Error(e));
-      })
-    );
+    return this.httpClient.get<Region[]>(`${this.urlBackend}/regiones`);
   }
 
-  private isNoAutorizado(e) : boolean {
-    if(e.status == 401 || e.status == 403){
-      this.router.navigate(['/login'])
-      return true;
-    }
-    return false;
-  }
 }

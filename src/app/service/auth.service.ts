@@ -96,4 +96,11 @@ export class AuthService {
     this._usuario = null;
     sessionStorage.clear();//limpiamos los datos de la sesion
   }
+
+  hasRole(role : string): boolean {
+    if(this.usuario.roles.includes(role)){
+      return true;
+    }
+    return false;
+  }
 }

@@ -20,7 +20,7 @@
                                 </ul>
 
 
-                                <div class="input-group mb-3">
+                                <div class="input-group mb-3" *ngIf="authService.hasRole('ROLE_ADMIN')">
                                     <input (change)="seleccionarFoto($event)" type="file" class="form-control"
                                         id="inputGroupFile04" aria-describedby="inputGroupFileAddon04"
                                         aria-label="Upload">

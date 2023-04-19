@@ -17,19 +17,19 @@
     <table class="table table-bordered table-striped" *ngIf="clientes?.length > 0">
       <thead>
         <tr>
-          <th>Perfil</th>
+          <th *ngIf="authService.hasRole('ROLE_USER')">Perfil</th>
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Email</th>
           <th>Fecha</th>
-          <th>Editar</th>
-          <th>Eliminar</th>
+          <th *ngIf="authService.hasRole('ROLE_ADMIN')">Editar</th>
+          <th *ngIf="authService.hasRole('ROLE_ADMIN')">Eliminar</th>
         </tr>
       </thead>
 
       <tbody>
         <tr *ngFor="let item of clientes">
-          <td><img (click)="abrirModal(item)" *ngIf="item?.foto"
+          <td *ngIf="authService.hasRole('ROLE_USER')"><img (click)="abrirModal(item)" *ngIf="item?.foto"
             src="http://localhost:8080/apiCliente/uploads/img/{{item.foto}}"
             alt="Foto de cliente {{item.nombre}}" class="img-thumbnail rounded"
             style="width: 64px; height: 64px; cursor: pointer; margin-left: 10%;"> <!-- cursor.pointer mostrar la mano en vez de la flecha al pasar por encima -->
@@ -44,10 +44,10 @@
           <td>{{item.apellido | uppercase}}</td>
           <td>{{item.email}}</td>
           <td>{{item.createAt | date:"EEEE dd, MMMM yyyy"}}</td>
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
             <button type="button" name="button" [routerLink]="['/clientes/form',item.id]" class="btn btn-primary">Editar</button>
           </td>
-          <td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')">
             <button type="button" name="button" (click)="deleteCliente(item)" class="btn btn-danger">Eliminar</button>
           </td>
         </tr>

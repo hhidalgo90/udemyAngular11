@@ -1,0 +1,13 @@
+#contenedor {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+}
+
+h1 {
+    font-weight: bold;
+}
