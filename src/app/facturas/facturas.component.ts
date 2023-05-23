@@ -125,7 +125,7 @@ export class FacturasComponent implements OnInit {
   guardarFactura() : void {
     this.facturaService.guardarFactura(this.factura).subscribe(resp => {
       Swal.fire(this.titulo, `Factura ${resp.descripcion} creada con exito!`, 'success');
-      this.router.navigate(['/clientes']);
+      this.router.navigate(['/facturas', resp.id]);
     });
   }
 
