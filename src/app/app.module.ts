@@ -11,7 +11,7 @@ import { ClienteService } from './service/cliente.service';
 import { RouterModule, Routes} from '@angular/router';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http'; //Permite conecciones http
 import { FormComponent } from './clientes/form.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData} from '@angular/common'; //Para formatear la fecha
 import  localeES  from '@angular/common/locales/es';//indidamos que es para espanol, se puede para multiples idiomas y paises(angular i18n) 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -25,6 +25,10 @@ import { RoleGuard } from './usuarios/guards/role.guard';
 import { TokenInterceptor } from './usuarios/interceptors/token';
 import { AuthInterceptor } from './usuarios/interceptors/auth';
 import { DefaultComponent } from './404/default/default.component';
+import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
+import { FacturasComponent } from './facturas/facturas.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatInputModule} from '@angular/material/input';
 //import { MatFormFieldModule } from '@angular/material/form-field/form-field-module';
 
 
@@ -38,6 +42,8 @@ const routes : Routes = [
   {path: 'clientes/form', component : FormComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_ADMIN'}},
   {path: 'clientes/form/:id', component : FormComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_ADMIN'}},
   {path: 'login', component : LoginComponent},
+  {path: 'facturas/:id', component: DetalleFacturaComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_USER'}},
+  {path: 'facturas/form/:clienteId', component: FacturasComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_ADMIN'}},
   {path: '**', component: DefaultComponent}
 ]
 
@@ -52,7 +58,9 @@ const routes : Routes = [
     PaginatorComponent,
     DetalleComponent,
     LoginComponent,
-    DefaultComponent
+    DefaultComponent,
+    DetalleFacturaComponent,
+    FacturasComponent
   ],
   imports: [
     BrowserModule,
@@ -62,7 +70,10 @@ const routes : Routes = [
     BrowserAnimationsModule,
     MatDatepickerModule,
     MatFormFieldModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule
   ],
   providers: [ClienteService, 
   {provide: LOCALE_ID, useValue: 'es' },//LOCALE_ID para indicar al aplicacion el idioma o localizacion de esta misma

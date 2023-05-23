@@ -5,6 +5,8 @@ import { Cliente } from '../cliente';
 import Swal from 'sweetalert2';
 import { ModalService } from './modal.service';
 import { AuthService } from 'src/app/service/auth.service';
+import { FacturasService } from 'src/app/facturas/services/facturas.service';
+import { Factura } from 'src/app/facturas/models/factura';
 
 @Component({
   selector: 'detalle-cliente',
@@ -17,9 +19,11 @@ export class DetalleComponent implements OnInit {
   titulo : String = "Detalle del Cliente";
   imagenSeleccionada : File;
   progreso: number = 0;
+  factura : Factura;
 
   //Con ActivatedRoute recibo el parametro enviado por el RouterLink en la vista
-  constructor(private clienteService : ClienteService, public modalService : ModalService, public authService : AuthService) { }
+  constructor(private clienteService : ClienteService, public modalService : ModalService, public authService : AuthService,
+    private facturaService : FacturasService) { }
 
   ngOnInit(): void {
 
@@ -63,6 +67,49 @@ export class DetalleComponent implements OnInit {
     this.modalService.cerrarModal();
     this.imagenSeleccionada = null;
     this.progreso = 0;
+  }
+
+  delete(facturaAEliminar: Factura): void {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    })
+
+    swalWithBootstrapButtons.fire({
+      title: `Estas seguro que deseas eliminar a la Factura ${facturaAEliminar.descripcion}?`,
+      text: "Esta acción no se puede revertir!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, borrala!',
+      cancelButtonText: 'No, cancelar!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(facturaAEliminar.id);
+        if(facturaAEliminar.id){
+          this.facturaService.eliminarFactura(facturaAEliminar.id).subscribe(resp => {
+            this.cliente.facturas = this.cliente.facturas.filter(fact => fact != facturaAEliminar);
+            swalWithBootstrapButtons.fire(
+              'Eliminado!',
+              `La factura ${facturaAEliminar.descripcion} ha sido eliminado.`,
+              'success'
+            )
+          });
+        }
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire(
+          'Cancelado',
+          `${facturaAEliminar.descripcion} esta feliz de que no lo hayas eliminado :)`,
+          'error'
+        )
+      }
+    })
   }
 
 }
