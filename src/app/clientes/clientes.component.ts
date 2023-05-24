@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router'
 import Swal from 'sweetalert2'
 import { ModalService } from './detalle/modal.service';
 import { AuthService } from '../service/auth.service'
+import { URL_BACKEND } from '../config/config';
 
 
 
@@ -19,6 +20,7 @@ export class ClientesComponent implements OnInit {
   idCliente: any;
   paginadorPadre: any;
   clienteSeleccionado : Cliente;
+  urlBackend : string = URL_BACKEND;
 
   constructor(public clienteService: ClienteService, private router : Router, private activatedRoute :ActivatedRoute,
     public modalService : ModalService, public authService : AuthService) { }

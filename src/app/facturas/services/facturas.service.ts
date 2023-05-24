@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Factura } from '../models/factura';
 import { Observable} from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
 import { Producto } from '../models/producto';
+import { URL_BACKEND } from '../../config/config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FacturasService {
 
-  private urlEndpoint: string = 'http://localhost:8080/apiCliente/facturas';
+  private urlEndpoint: string = URL_BACKEND + '/apiCliente/facturas';
 
   constructor(private http: HttpClient) { }
 

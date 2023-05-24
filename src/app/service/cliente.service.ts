@@ -7,12 +7,16 @@ import { map , catchError, tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { Region } from '../clientes/region';
+import { URL_BACKEND } from '../config/config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
-  private urlBackend : string = 'http://localhost:8080/apiCliente/clientes';
+ // private urlBackend : string = 'http://localhost:8080/apiCliente/clientes';
+
+ //Url backend heroku
+ private urlBackend : string = URL_BACKEND + '/apiCliente/clientes';
 
   /*SE ELIMINA ESTA IMPLEMENTACION YA QUE SE AGREGA EL TOKEN INTERCEPTOR, QUE GENERA EL HEADERS AUTOMATICAMENTE
   private headers = new HttpHeaders({
